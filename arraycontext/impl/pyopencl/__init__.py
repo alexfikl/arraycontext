@@ -275,8 +275,11 @@ class PyOpenCLArrayContext(ArrayContext):
         # Sorry, not capable.
         return array
 
-    def clone(self):
-        return type(self)(self.queue, self.allocator,
+    def clone(self) -> "PyOpenCLArrayContext":
+        return self.with_queue(self.queue)
+
+    def with_queue(self, queue: "pyopencl.CommandQueue") -> "PyOpenCLArrayContext":
+        return type(self)(queue, self.allocator,
                 wait_event_queue_length=self._wait_event_queue_length,
                 force_device_scalars=self._force_device_scalars)
 
